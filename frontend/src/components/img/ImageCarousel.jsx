@@ -1,10 +1,37 @@
-import { Box, Button, Center, Flex, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Grid,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+} from "@chakra-ui/react";
+import { useState } from "react";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
-export default function ImageCarousel({ data }) {
+import { toBase64 } from "../../utils/base64";
+
+const token = JSON.parse(
+  localStorage.getItem("@mob_landpage_f0552434361ccf7da13bdece6f1efddc")
+);
+
+export default function ImageCarousel({
+  data,
+  setData = () => {},
+  isEdit = false,
+}) {
+  const [modal, setModal] = useState(false);
   if (!data) {
     return <div>Propriedade 'data' não fornecida.</div>;
   }
@@ -36,7 +63,9 @@ export default function ImageCarousel({ data }) {
             >
               <Button
                 size="lg"
-                colorScheme="blue"
+                // colorScheme={bannerItem.buttonHex ?? "#3182ce"}
+                background={bannerItem.buttonHex ?? "#3182ce"}
+                color={bannerItem.buttonTextHex ?? "#000000"}
                 borderRadius="md"
                 fontWeight="bold"
               >
@@ -85,8 +114,151 @@ export default function ImageCarousel({ data }) {
     );
   };
 
+  function Form() {
+    const [edited, setEdited] = useState(data);
+
+    const [image, setImage] = useState({
+      currentFile: null,
+    });
+    async function selectFile(id, event) {
+      const base64 = await toBase64(event.target.files[0]);
+      const objectUrl = URL.createObjectURL(event.target.files[0]);
+      const newBanner = edited.banner.map((reg) => {
+        if (reg.id == id) {
+          reg.base64 = base64;
+          reg.src = objectUrl;
+        }
+        return reg;
+      });
+      setEdited((prev) => ({ ...prev, banner: newBanner }));
+      // setImage({
+      //   currentFile: event.target.files[0],
+      //   previewImage: URL.createObjectURL(event.target.files[0]),
+      //   progress: 0,
+      //   message: "",
+      // });
+    }
+    function changeValue(id, event) {
+      const target = event.target;
+      const inputName = target.name;
+      const value = target.value;
+      const newBanner = edited.banner.map((reg) => {
+        if (reg.id == id) {
+          reg[inputName] = value;
+          if (inputName == "buttonText" && value == "") {
+            delete reg[inputName];
+          }
+        }
+        return reg;
+      });
+      setEdited((prev) => ({ ...prev, banner: newBanner }));
+      // console.log(newBanner);
+    }
+    console.log(data);
+    return (
+      <Modal
+        isOpen={modal}
+        isCentered
+        onClose={() => setModal(false)}
+        width="100%"
+      >
+        <ModalOverlay />
+        <ModalContent width="100%">
+          <ModalCloseButton />
+          <ModalHeader>Alteração banner</ModalHeader>
+          <ModalBody overflow={"scroll"} width={"100%"}>
+            <Grid
+              width={"100%"}
+              alignItems="center"
+              justifyContent={"space-between"}
+              gap={4}
+            >
+              {data.banner.map((banner) => (
+                <Flex
+                  flexDirection={"column"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  gap={10}
+                  background={"#CCC"}
+                  rounded={"10px"}
+                  paddingY={10}
+                  paddingX={3}
+                  key={banner.id}
+                >
+                  {banner.src && (
+                    <Image
+                      src={banner.src}
+                      height="auto"
+                      width="80%"
+                      rounded={"10px"}
+                    />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(el) => selectFile(banner.id, el)}
+                  />
+                  <Input
+                    background={"#ffffff"}
+                    defaultValue={banner.href}
+                    name={`href`}
+                    onChange={(event) => changeValue(banner.id, event)}
+                  />
+                  <Flex flexDirection={"column"} gap={2}>
+                    <Flex
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={2}
+                    >
+                      <Input
+                        border={0}
+                        background={banner.buttonHex ?? "#2c6cb0"}
+                        color={banner.buttonTextHex ?? "#000000"}
+                        defaultValue={banner.buttonText}
+                        name={`buttonText`}
+                        onChange={(event) => changeValue(banner.id, event)}
+                      />
+                      <input
+                        type="color"
+                        defaultValue={banner.buttonHex ?? "#2c6cb0"}
+                        name={`buttonHex`}
+                        onChange={(event) => changeValue(banner.id, event)}
+                      />
+                      <input
+                        type="color"
+                        defaultValue={banner.buttonTextHex ?? "#000000"}
+                        name={`buttonTextHex`}
+                        onChange={(event) => changeValue(banner.id, event)}
+                      />
+                    </Flex>
+                    <Text fontSize={"80%"}>
+                      O botão será removido do banner se estiver vazio
+                    </Text>
+                  </Flex>
+                </Flex>
+              ))}
+            </Grid>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
+  }
+
   return (
     <Box maxH="0%" w="100%">
+      {isEdit && (
+        <>
+          <Button
+            position={"relative"}
+            transform="translate(10%, 120%)"
+            zIndex={99}
+            onClick={() => setModal(true)}
+          >
+            Editar
+          </Button>
+          <Form />
+        </>
+      )}
       <Carousel />
     </Box>
   );
