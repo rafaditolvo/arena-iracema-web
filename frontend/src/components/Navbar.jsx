@@ -1,31 +1,30 @@
-import React from "react";
 import {
-  Box,
-  Flex,
-  Text,
-  IconButton,
-  Button,
-  Stack,
-  Collapse,
-  Icon,
-  Link,
-  Image,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  useColorModeValue,
-  useBreakpointValue,
-  useDisclosure,
-} from "@chakra-ui/react";
-import {
-  HamburgerIcon,
-  CloseIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  CloseIcon,
+  HamburgerIcon,
 } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Collapse,
+  Flex,
+  Icon,
+  IconButton,
+  Image,
+  Link,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Stack,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
+import React from "react";
 
-import logo from "../components/img/logo.svg"
 import "../App.css";
+import logo from "../components/img/logo.svg";
 
 function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
@@ -33,18 +32,17 @@ function Navbar() {
   const NAV_ITEMS = [
     {
       label: "SOBRE",
-     
+      elementId: "sobreId",
     },
     {
       label: "CONVITE",
-      
+      elementId: "conviteId",
     },
 
     {
       label: "EVENTOS",
-      
+      elementId: "eventosId",
     },
-  
   ];
 
   const DesktopNav = () => {
@@ -52,27 +50,36 @@ function Navbar() {
     const linkHoverColor = useColorModeValue("gray.800", "white");
     const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
+    const handleClickScroll = (elementId) => {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
     return (
-      <Stack direction={"row"} mb="2em" spacing={4}  >
+      <Stack direction={"row"} mb="2em" spacing={4}>
         {NAV_ITEMS.map((navItem) => (
-          <Box key={navItem.label} >
+          <Box key={navItem.label}>
             <Popover trigger={"hover"} placement={"bottom-start"}>
               <PopoverTrigger>
-              <Button
-  p={2}
-  fontSize={"sm"}
-  fontWeight={500}
-  variant='link'
-  color={linkColor}
-  _hover={{
-    textDecoration: "none",
-    color: linkHoverColor,
-  }}
-  className="button-hover" // Adicione esta linha
->
-  {navItem.label}
-</Button>
-
+                <Button
+                  p={2}
+                  fontSize={"sm"}
+                  fontWeight={500}
+                  variant="link"
+                  color={linkColor}
+                  _hover={{
+                    textDecoration: "none",
+                    color: linkHoverColor,
+                  }}
+                  className="button-hover" // Adicione esta linha
+                  onClick={() => {
+                    handleClickScroll(navItem.elementId);
+                  }}
+                >
+                  {navItem.label}
+                </Button>
               </PopoverTrigger>
 
               {navItem.children && (
@@ -109,7 +116,7 @@ function Navbar() {
         _hover={{ bg: useColorModeValue("pink.50", "gray.900") }}
       >
         <Stack direction={"row"} align={"center"}>
-          <Box >
+          <Box>
             <Text
               transition={"all .3s ease"}
               _groupHover={{ color: "#9901F6" }}
@@ -207,7 +214,7 @@ function Navbar() {
     );
   };
   return (
-    <Box //className="navbar" 
+    <Box //className="navbar"
     >
       <Flex
         bg={useColorModeValue("white", "gray.800")}
@@ -241,11 +248,9 @@ function Navbar() {
             mt="0.5em"
             src={logo}
             color="#FF7F00"
-          >
-           
-          </Image>
+          ></Image>
 
-          <Flex display={{ base: "none", md: "flex" }} mt='2em' ml={10}>
+          <Flex display={{ base: "none", md: "flex" }} mt="2em" ml={10}>
             <DesktopNav />
           </Flex>
         </Flex>

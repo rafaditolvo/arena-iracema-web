@@ -1,23 +1,20 @@
 import {
-  Container,
-  Stack,
-  Flex,
   Box,
+  Container,
+  Flex,
   Heading,
-  Text,
-  Button,
-  Image,
   Icon,
-  useBreakpointValue,
   IconButton,
+  Image,
+  Stack,
+  Text,
   createIcon,
-  IconProps,
-  useColorModeValue,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 export const Blur = (props) => {
   return (
@@ -30,25 +27,17 @@ export const Blur = (props) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-     <circle cx="71" cy="300" r="111" fill=" #FF7F00" />
-     
-     
-      
-     
-     
-  
+      <circle cx="71" cy="300" r="111" fill=" #FF7F00" />
     </Icon>
   );
 };
 
-export default function Hero({data}) {
-
+export default function Hero({ data }) {
   if (!data) {
-   
     return <div>Propriedade 'data' não fornecida.</div>;
   }
 
-  console.log(data.events)
+  console.log(data.events);
 
   const Carousel = () => {
     const settings = {
@@ -58,111 +47,90 @@ export default function Hero({data}) {
       autoplay: true,
       autoplaySpeed: 3000,
       dots: true,
-      appendDots: (dots) => (
-     
-          <ul style={{ margin: "0px" }}>{dots}</ul>
-       
-      ),
+      appendDots: (dots) => <ul style={{ margin: "0px" }}>{dots}</ul>,
     };
 
-
-  
     return (
       <Slider {...settings}>
-      {data.events.map((event) => (
-        <Image
-          key={event.id}
-          alt={"Event Image"}
-          w={"100%"}
-          h="100%"
-          objectFit="cover"
-          src={event.src}
-        />
-      ))}
-    </Slider>
+        {data.events.map((event) => (
+          <Image
+            key={event.id}
+            alt={"Event Image"}
+            w={"100%"}
+            h="100%"
+            objectFit="cover"
+            src={event.src}
+          />
+        ))}
+      </Slider>
     );
   };
   return (
-    <Container maxW={"7xl"} mt="3em">
-           <Heading
-          lineHeight={1.1}
-          fontWeight={600}
-          fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}
-          textAlign="start"
-        >
-       
-         
-       <Text
-              as={'span'}
-              bgGradient="linear(to-r, #FF7F00, #FFD700, #00BFFF, #9901F6)"
-              bgClip="text">
-   Próximos Eventos
-            </Text>{' '}
-        
-          
-          
-        </Heading>
-    <Stack
-      align={"center"}
-      spacing={{ base: 10, md: 20 }}
-      py={{ base: 30, md: 30 }}
-      direction={{ base: "column", md: "row" }}
-    >
-        
-       
-      <Stack flex={1} spacing={{ base: 10, md: 10 }}>
-     
- 
-      
-        
-      </Stack>
-      
-      <Flex
-        flex={1}
-        justify={"center"}
-        align={"center"}
-        
-        position={"relative"}
-        w={"full"}
+    <Container maxW={"7xl"} mt="3em" id="eventosId">
+      <Heading
+        lineHeight={1.1}
+        fontWeight={600}
+        fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}
+        textAlign="start"
       >
-       
-        <Blob
-          w={"150%"}
-          h={"150%"}
-          position={"absolute"}
-          top={"-20%"}
-          left={0}
-          zIndex={-1}
-          color="#00BFFF"
-        />
-        
-        <Box
-          position={"relative"}
-        h="100%"
-          rounded={"2xl"}
-          boxShadow={"2xl"}
-          width={"full"}
-          overflow={"hidden"}
+        <Text
+          as={"span"}
+          bgGradient="linear(to-r, #FF7F00, #FFD700, #00BFFF, #9901F6)"
+          bgClip="text"
         >
-        
-          <IconButton
-            aria-label={"Play Button"}
-            variant={"ghost"}
-            _hover={{ bg: "transparent" }}
-            icon={<PlayIcon w={12} h={12} />}
-            size={"lg"}
-            color={"white"}
+          Próximos Eventos
+        </Text>{" "}
+      </Heading>
+      <Stack
+        align={"center"}
+        spacing={{ base: 10, md: 20 }}
+        py={{ base: 30, md: 30 }}
+        direction={{ base: "column", md: "row" }}
+      >
+        <Stack flex={1} spacing={{ base: 10, md: 10 }}></Stack>
+
+        <Flex
+          flex={1}
+          justify={"center"}
+          align={"center"}
+          position={"relative"}
+          w={"full"}
+        >
+          <Blob
+            w={"150%"}
+            h={"150%"}
             position={"absolute"}
-            left={"50%"}
-            top={"50%"}
-            transform={"translateX(-50%) translateY(-50%)"}
+            top={"-20%"}
+            left={0}
+            zIndex={-1}
+            color="#00BFFF"
           />
-          <Carousel />
-        </Box>
-      </Flex>
-      
-    </Stack>
-  </Container>
+
+          <Box
+            position={"relative"}
+            h="100%"
+            rounded={"2xl"}
+            boxShadow={"2xl"}
+            width={"full"}
+            overflow={"hidden"}
+          >
+            <IconButton
+              aria-label={"Play Button"}
+              variant={"ghost"}
+              _hover={{ bg: "transparent" }}
+              icon={<PlayIcon w={12} h={12} />}
+              size={"lg"}
+              color={"white"}
+              position={"absolute"}
+              left={"50%"}
+              top={"50%"}
+              transform={"translateX(-50%) translateY(-50%)"}
+            />
+            <Carousel />
+          </Box>
+        </Flex>
+      </Stack>
+    </Container>
   );
 }
 
