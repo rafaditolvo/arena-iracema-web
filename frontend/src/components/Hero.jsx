@@ -41,7 +41,14 @@ export const Blur = (props) => {
   );
 };
 
-export default function Hero() {
+export default function Hero({data}) {
+
+  if (!data) {
+   
+    return <div>Propriedade 'data' não fornecida.</div>;
+  }
+
+  console.log(data.events)
 
   const Carousel = () => {
     const settings = {
@@ -62,25 +69,17 @@ export default function Hero() {
   
     return (
       <Slider {...settings}>
-      <Image
-  alt={"Hero Image 1"}
-  w={"100%"}
-  h="100%"
-  objectFit="cover"
-  src={"https://images.sympla.com.br/61f7eb8e3cf4a-xs.jpg"}
-/>
-
+      {data.events.map((event) => (
         <Image
-          alt={"Hero Image 2"}
-         
+          key={event.id}
+          alt={"Event Image"}
           w={"100%"}
           h="100%"
           objectFit="cover"
-          src={
-            "https://images.sympla.com.br/6213a2982207e-xs.jpg"
-          }
+          src={event.src}
         />
-      </Slider>
+      ))}
+    </Slider>
     );
   };
   return (
@@ -134,7 +133,7 @@ export default function Hero() {
           top={"-20%"}
           left={0}
           zIndex={-1}
-          color={useColorModeValue("#00BFFF", "red.400")}
+          color="#00BFFF"
         />
         
         <Box

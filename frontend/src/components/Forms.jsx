@@ -6,12 +6,13 @@ import {
   Text,
   Container,
   Input,
-  Button,
   chakra,
   SimpleGrid,
+  Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, Button,
   Avatar,
   Image,
   AvatarGroup,
+  Center,
   useBreakpointValue,
   IconProps,
   Icon,
@@ -19,31 +20,54 @@ import {
 import axios from 'axios';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import {useState} from "react";
+import { keyframes } from "@emotion/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
+import InputMask from 'react-input-mask';
+import { motion } from "framer-motion";
 
-const avatars = [
-  {
-    name: "Ryan Florence",
-    url: "https://avatars.githubusercontent.com/u/109284750?v=4",
-  },
-  {
-    name: "Segun Adebayo",
-    url: "https://avatars.githubusercontent.com/u/109284750?v=4",
-  },
-  {
-    name: "Kent Dodds",
-    url: "https://avatars.githubusercontent.com/u/109284750?v=4",
-  },
-  {
-    name: "Prosper Otemuyiwa",
-    url: "https://avatars.githubusercontent.com/u/109284750?v=4",
-  },
-  {
-    name: "Christian Nwamba",
-    url: "https://avatars.githubusercontent.com/u/109284750?v=4",
-  },
-];
 
-export default function Forms() {
+
+
+export default function Forms({data}) {
+
+
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+const [showErrorModal, setShowErrorModal] = useState(false);
+
+const ModalAnimate = motion.div;
+
+const openSuccessModal = () => {
+  setShowSuccessModal(true);
+};
+
+const closeSuccessModal = () => {
+  setShowSuccessModal(false);
+};
+
+const openErrorModal = () => {
+  setShowErrorModal(true);
+};
+
+const closeErrorModal = () => {
+  setShowErrorModal(false);
+};
+
+
+
+const pulseAnimation = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
 
   const onSubmit = (values) => {
     console.log(values);
@@ -54,14 +78,14 @@ export default function Forms() {
     try {
       const response = await axios.post('http://localhost:4000/formulario', formData);
       console.log(response.data);
+      openSuccessModal();
       // Faça algo com a resposta recebida, se necessário
     } catch (error) {
       console.error(error);
+      openErrorModal();
       // Lide com erros, se houver algum
     }
-    console.log(formData)
-  };
-  
+  };    
   
   // Exemplo de uso
   const formData = {
@@ -78,7 +102,15 @@ export default function Forms() {
     dob: Yup.string().required('Campo obrigatório'),
   });
 
-
+  const inputStyle = {
+    bg: "gray.100",
+    border: 0,
+    color: "gray.500",
+    _placeholder: {
+      color: "gray.500"
+    }
+  };
+  
 
   
   return (
@@ -91,7 +123,54 @@ export default function Forms() {
         spacing={{ base: 5, lg: 250 }}
         py={{ base: 20, sm: 40, lg: 42 }}
       >
-        
+     
+     
+{/* Modal de sucesso */}
+<Modal
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  isOpen={showSuccessModal}
+  w="80%"
+  onClose={closeSuccessModal}
+>
+  <ModalOverlay />
+  <ModalContent>
+   
+    <ModalBody>
+      <Center>  <Icon
+        as={CheckCircleIcon}
+        w={20}
+        h={20}
+        mt='2em'
+        color="green.500"
+        animation={`${pulseAnimation} 1s infinite`}
+      /></Center>
+    
+      <Text mt={6} textAlign="center">
+        Seu formulário foi enviado com sucesso.
+      </Text>
+    </ModalBody>
+    <ModalFooter>
+      <Button colorScheme="blue" onClick={closeSuccessModal}>Fechar</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+
+
+    {/* Modal de erro */}
+    <Modal isOpen={showErrorModal} onClose={closeErrorModal}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Erro!</ModalHeader>
+        <ModalBody>
+          Houve um erro ao enviar o formulário. Por favor, tente novamente.
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="red" onClick={closeErrorModal}>Fechar</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
         <Stack flex={1} spacing='50px'>
      
           <Heading
@@ -109,11 +188,7 @@ export default function Forms() {
           </Heading>
           
           <Text color={"gray.500"} fontSize={{ base: "lg", sm: "lg" }} w="100%">
-              We’re looking for amazing engineers just like you! Become a part
-              of our rockstar engineering team and skyrocket your career!
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-          It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-          and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+             {data.form?.h1}
             </Text>
               <Image
           alt={"Hero Image 1"}
@@ -159,30 +234,33 @@ export default function Forms() {
           <Stack spacing={{ base: 10, md: 20 }}>
    
    <Stack direction={"row"} spacing={4} align={"center"}>
-     <AvatarGroup>
-       {avatars.map((avatar) => (
-         <Avatar
-           key={avatar.name}
-           name={avatar.name}
-           src={avatar.url}
-           size={{ base: "md", md: "lg" }}
-           position={"relative"}
-           zIndex={2}
-           _before={{
-             content: '""',
-             width: "full",
-             height: "full",
-             rounded: "full",
-             transform: "scale(1.125)",
-             bgGradient: "linear-gradient(to bottom left, #FF7F00, #FFD700, #00BFFF, #9901F6)",
-             position: "absolute",
-             zIndex: -1,
-             top: 0,
-             left: 0,
-           }}
-         />
-       ))}
-     </AvatarGroup>
+   <AvatarGroup>
+  {data.form?.avatar?.map((avatar) => (
+    <Avatar
+      key={avatar.id}
+      name={avatar.id.toString()}
+      src={avatar.src}
+      size={{ base: "md", md: "lg" }}
+      position={"relative"}
+      zIndex={2}
+      _before={{
+        content: '""',
+        width: "full",
+        height: "full",
+        rounded: "full",
+        transform: "scale(1.125)",
+        bgGradient: "linear-gradient(to bottom left, #FF7F00, #FFD700, #00BFFF, #9901F6)",
+        position: "absolute",
+        zIndex: -1,
+        top: 0,
+        left: 0,
+      }}
+    />
+  ))}
+</AvatarGroup>
+
+
+
      <Text fontFamily={"heading"} fontSize={{ base: "4xl", md: "6xl" }}>
        +
      </Text>
@@ -194,8 +272,8 @@ export default function Forms() {
        bg={"gray.800"}
        color={"white"}
        rounded={"full"}
-       minWidth={useBreakpointValue({ base: "44px", md: "60px" })}
-       minHeight={useBreakpointValue({ base: "44px", md: "60px" })}
+       minWidth={({ base: "44px", md: "60px" })}
+       minHeight={({ base: "44px", md: "60px" })}
        position={"relative"}
        _before={{
          content: '""',
@@ -223,7 +301,7 @@ export default function Forms() {
     dob: ""
   }}
   validationSchema={validationSchema}
-  onSubmit={handleSubmit} // Certifique-se de que handleSubmit esteja definido corretamente
+  onSubmit={handleSubmit} 
 >
   {({ errors, touched, isValid }) => (
     <Form>
@@ -231,7 +309,7 @@ export default function Forms() {
         <Field
           as={Input}
           name="firstname" // Corrigido para "firstname"
-          placeholder="Firstname"
+          placeholder="Nome"
           bg="gray.100"
           border={0}
           color="gray.500"
@@ -246,7 +324,7 @@ export default function Forms() {
         <Field
           as={Input}
           name="email"
-          placeholder="firstname@lastname.io"
+          placeholder="O seu Melhor E-mail!"
           bg="gray.100"
           border={0}
           color="gray.500"
@@ -257,18 +335,26 @@ export default function Forms() {
         {errors.email && touched.email && (
           <ErrorMessage component="span" name="email" color="red" />
         )}
+      
+      <Field name="phone">
+          {({ field }) => (
+               <Input
+               {...field}
+               as={InputMask}
+              mask="(99) 99999-9999"
+              placeholder="(__) _____-____"
+              className="Telefone"
+              color="gray.500"
+              _placeholder={{
+                color: "gray.500"
+              }}
+            
+            />
+          )}
+        </Field>
 
-        <Field
-          as={Input}
-          name="phone"
-          placeholder=" (__) _____-____"
-          bg="gray.100"
-          border={0}
-          color="gray.500"
-          _placeholder={{
-            color: "gray.500"
-          }}
-        />
+
+
         {errors.phone && touched.phone && (
           <ErrorMessage component="span" name="phone" color="red" />
         )}
@@ -309,8 +395,7 @@ export default function Forms() {
 
    <Text color={"gray.500"} fontSize={{ base: "sm", sm: "lg" }}>
              
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-          It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+   {data.form?.h2}
           
             </Text>
  </Stack>

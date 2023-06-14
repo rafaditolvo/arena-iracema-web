@@ -32,26 +32,17 @@ function Navbar() {
 
   const NAV_ITEMS = [
     {
-      label: "Sobre",
-      children: [
-        {
-          label: "Nossa História",
-        
-          href: "#",
-        },
-      
-      ],
+      label: "SOBRE",
+     
     },
     {
-      label: "Convite",
-      children: [
-        {
-          label: "Cadastre-se",
-        
-          href: "#",
-        },
+      label: "CONVITE",
       
-      ],
+    },
+
+    {
+      label: "EVENTOS",
+      
     },
   
   ];
@@ -62,24 +53,26 @@ function Navbar() {
     const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
     return (
-      <Stack direction={"row"} mt="2em" spacing={4}  >
+      <Stack direction={"row"} mb="2em" spacing={4}  >
         {NAV_ITEMS.map((navItem) => (
           <Box key={navItem.label} >
             <Popover trigger={"hover"} placement={"bottom-start"}>
               <PopoverTrigger>
-                <Link
-                  p={2}
-                  href={navItem.href ?? "#"}
-                  fontSize={"sm"}
-                  fontWeight={500}
-                  color={linkColor}
-                  _hover={{
-                    textDecoration: "none",
-                    color: linkHoverColor,
-                  }}
-                >
-                  {navItem.label}
-                </Link>
+              <Button
+  p={2}
+  fontSize={"sm"}
+  fontWeight={500}
+  variant='link'
+  color={linkColor}
+  _hover={{
+    textDecoration: "none",
+    color: linkHoverColor,
+  }}
+  className="button-hover" // Adicione esta linha
+>
+  {navItem.label}
+</Button>
+
               </PopoverTrigger>
 
               {navItem.children && (
@@ -243,9 +236,9 @@ function Navbar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
           <Image
-            boxSize="6em"
+            boxSize="5em"
             //fontFamily={"heading"}
-            
+            mt="0.5em"
             src={logo}
             color="#FF7F00"
           >

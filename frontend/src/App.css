@@ -10,4 +10,31 @@
     background-color: #ffffff;
     z-index: 999;
   }
+
+
+ .button-gradient {
+  background: linear-gradient(to right, #9901F6, #6200EE);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.button-hover:hover {
+  background: linear-gradient(to right, #6200EE, #9901F6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.phone-input {
+  background-color: gray.100;
+  border: 0;
+  color: gray.500;
+}
+
+.phone-input::placeholder {
+  color: gray.500;
+}
+
   
