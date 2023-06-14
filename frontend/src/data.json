@@ -1,0 +1,61 @@
+{
+    "banner":[
+        {
+            "id":1,
+            "src": "http://.png",
+            "href": "http://",
+            "buttonText": "Adquira ja"
+        },
+        {
+            "id":2,
+            "src": "http://.png",
+            "href": "http://",
+            "buttonText": "Adquira ja"
+        }
+    ],
+    "form":{
+        "avatar":[
+            {
+                "id":1,
+                "src": "http://.png"
+            },
+            {
+                "id":2,
+                "src": "http://.png"
+            },{
+                "id":3,
+                "src": "http://.png"
+            },
+            {
+                "id":4,
+                "src": "http://.png"
+            },
+            {
+                "id":5,
+                "src": "http://.png"
+            }
+        ],
+        "banner":"http://.png"
+    },
+    "events":[
+        {
+            "id":1,
+            "src": "http://.png"
+        },
+        {
+            "id":2,
+            "src": "http://.png"
+        },{
+            "id":3,
+            "src": "http://.png"
+        },
+        {
+            "id":4,
+            "src": "http://.png"
+        },
+        {
+            "id":5,
+            "src": "http://.png"
+        }
+    ]
+}
