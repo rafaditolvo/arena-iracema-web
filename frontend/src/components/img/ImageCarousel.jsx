@@ -1,25 +1,67 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Center,
-  Button,
-  Icon,
-  Flex,
-  Image,
-  Spinner,
-  useBreakpointValue,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useSwipeable } from 'react-swipeable';
+import { Box, Button, Center, Flex, Image } from "@chakra-ui/react";
 
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 export default function ImageCarousel({ data }) {
   if (!data) {
     return <div>Propriedade 'data' não fornecida.</div>;
   }
+
+  const BannerItem = (bannerItem) => {
+    if (bannerItem.buttonText) {
+      return (
+        <div key={bannerItem.id}>
+          <Image
+            alt={"Hero Image"}
+            fit={"cover"}
+            align={"center"}
+            maxH="700px"
+            w="100%"
+            src={bannerItem.src}
+            position="relative"
+          />
+
+          <Center
+            // position="absolute"
+            // left="50%"
+            transform="translate(30vw, -10vh)"
+          >
+            <a
+              href={bannerItem.href}
+              target="_blank"
+              key={bannerItem.id}
+              rel="noreferrer"
+            >
+              <Button
+                size="lg"
+                colorScheme="blue"
+                borderRadius="md"
+                fontWeight="bold"
+              >
+                {bannerItem.buttonText}
+              </Button>
+            </a>
+          </Center>
+        </div>
+      );
+    }
+    return (
+      <div key={bannerItem.id}>
+        <a href={bannerItem.href} target="_blank" rel="noreferrer">
+          <Image
+            alt={"Hero Image"}
+            fit={"cover"}
+            align={"center"}
+            maxH="700px"
+            w="100%"
+            src={bannerItem.src}
+          />
+        </a>
+      </div>
+    );
+  };
 
   const Carousel = () => {
     const settings = {
@@ -38,35 +80,7 @@ export default function ImageCarousel({ data }) {
 
     return (
       <Slider {...settings}>
-        {data.banner.map((bannerItem) => (
-          <a href={bannerItem.href} key={bannerItem.id}>
-            <Image
-              alt={"Hero Image"}
-              fit={"cover"}
-              align={"center"}
-              maxH="700px"
-              w="100%"
-              src={bannerItem.src}
-            />
-            {bannerItem.buttonText && (
-              <Center
-                position="absolute"
-                top="50%"
-                left="50%"
-                transform="translate(-50%, -50%)"
-              >
-                <Button
-                  size="lg"
-                  colorScheme="blue"
-                  borderRadius="md"
-                  fontWeight="bold"
-                >
-                  {bannerItem.buttonText}
-                </Button>
-              </Center>
-            )}
-          </a>
-        ))}
+        {data.banner.map((bannerItem) => BannerItem(bannerItem))}
       </Slider>
     );
   };
