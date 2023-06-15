@@ -19,6 +19,7 @@ import { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { v4 as uuidv4 } from "uuid";
 
 import { toBase64 } from "../../utils/base64";
 
@@ -154,7 +155,23 @@ export default function ImageCarousel({
       setEdited((prev) => ({ ...prev, banner: newBanner }));
       // console.log(newBanner);
     }
-    console.log(data);
+
+    function addNew() {
+      const newBanner = { ...data };
+      newBanner.banner.push({
+        id: uuidv4(),
+        src: "",
+        href: "#",
+      });
+
+      setData(newBanner);
+    }
+    function remove(id) {
+      const newBanner = { ...data };
+      newBanner.banner = newBanner.banner.filter((e) => e.id != id);
+      setData(newBanner);
+    }
+    // console.log(data);
     return (
       <Modal
         isOpen={modal}
@@ -165,7 +182,12 @@ export default function ImageCarousel({
         <ModalOverlay />
         <ModalContent width="100%">
           <ModalCloseButton />
-          <ModalHeader>Alteração banner</ModalHeader>
+          <ModalHeader>
+            Alteração banner{" "}
+            <Button colorScheme="blue" onClick={addNew}>
+              Add
+            </Button>
+          </ModalHeader>
           <ModalBody overflow={"scroll"} width={"100%"}>
             <Grid
               width={"100%"}
@@ -181,10 +203,18 @@ export default function ImageCarousel({
                   gap={10}
                   background={"#CCC"}
                   rounded={"10px"}
-                  paddingY={10}
+                  paddingBottom={10}
                   paddingX={3}
                   key={banner.id}
                 >
+                  <Button
+                    marginTop={3}
+                    alignSelf={"end"}
+                    colorScheme="red"
+                    onClick={() => remove(banner.id)}
+                  >
+                    X
+                  </Button>
                   {banner.src && (
                     <Image
                       src={banner.src}
