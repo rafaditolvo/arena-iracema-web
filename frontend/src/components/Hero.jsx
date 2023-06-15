@@ -1,20 +1,33 @@
 import {
   Box,
+  Button,
   Container,
   Flex,
+  Grid,
   Heading,
   Icon,
   IconButton,
   Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
   createIcon,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import { useState } from "react";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+
+import { v4 as uuidv4 } from "uuid";
+
+import { toBase64 } from "../utils/base64";
 
 export const Blur = (props) => {
   return (
@@ -32,7 +45,8 @@ export const Blur = (props) => {
   );
 };
 
-export default function Hero({ data }) {
+export default function Hero({ data, setData = () => {}, isEdit = false }) {
+  const [modal, setModal] = useState(false);
   if (!data) {
     return <div>Propriedade 'data' não fornecida.</div>;
   }
@@ -65,72 +79,185 @@ export default function Hero({ data }) {
       </Slider>
     );
   };
+
+  function Form() {
+    const [edited, setEdited] = useState(data);
+
+    async function selectFile(id, event) {
+      const base64 = await toBase64(event.target.files[0]);
+      const objectUrl = URL.createObjectURL(event.target.files[0]);
+      const newBanner = edited.events.map((reg) => {
+        if (reg.id == id) {
+          reg.base64 = base64;
+          reg.src = objectUrl;
+        }
+        return reg;
+      });
+      setEdited((prev) => ({ ...prev, banner: newBanner }));
+    }
+
+    function addNew() {
+      const newBanner = { ...data };
+      newBanner.events.push({
+        id: uuidv4(),
+        src: "",
+      });
+
+      setData(newBanner);
+    }
+    function remove(id) {
+      const newBanner = { ...data };
+      newBanner.events = newBanner.events.filter((e) => e.id != id);
+      setData(newBanner);
+    }
+    // console.log(data);
+    return (
+      <Modal
+        isOpen={modal}
+        isCentered
+        onClose={() => setModal(false)}
+        width="100%"
+        size={"lg"}
+      >
+        <ModalOverlay />
+        <ModalContent width="100%">
+          <ModalCloseButton />
+          <ModalHeader>
+            Alteração Eventos{" "}
+            <Button colorScheme="blue" onClick={addNew}>
+              Add
+            </Button>
+          </ModalHeader>
+          <ModalBody overflow={"scroll"} width={"100%"}>
+            <Grid
+              width={"100%"}
+              alignItems="center"
+              justifyContent={"space-between"}
+              gap={4}
+            >
+              {data.events.map((banner) => (
+                <Flex
+                  flexDirection={"column"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  gap={10}
+                  background={"#CCC"}
+                  rounded={"10px"}
+                  paddingBottom={10}
+                  paddingX={3}
+                  key={banner.id}
+                >
+                  <Button
+                    marginTop={3}
+                    alignSelf={"end"}
+                    colorScheme="red"
+                    onClick={() => remove(banner.id)}
+                  >
+                    X
+                  </Button>
+                  {banner.src && (
+                    <Image
+                      src={banner.src}
+                      height="auto"
+                      width="80%"
+                      rounded={"10px"}
+                    />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(el) => selectFile(banner.id, el)}
+                  />
+                </Flex>
+              ))}
+            </Grid>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
+  }
+
   return (
-    <Container maxW={"7xl"} mt="3em" id="eventosId">
-      <Heading
-        lineHeight={1.1}
-        fontWeight={600}
-        fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}
-        textAlign="start"
-      >
-        <Text
-          as={"span"}
-          bgGradient="linear(to-r, #FF7F00, #FFD700, #00BFFF, #9901F6)"
-          bgClip="text"
-        >
-          Próximos Eventos
-        </Text>{" "}
-      </Heading>
-      <Stack
-        align={"center"}
-        spacing={{ base: 10, md: 20 }}
-        py={{ base: 30, md: 30 }}
-        direction={{ base: "column", md: "row" }}
-      >
-        <Stack flex={1} spacing={{ base: 10, md: 10 }}></Stack>
-
-        <Flex
-          flex={1}
-          justify={"center"}
-          align={"center"}
-          position={"relative"}
-          w={"full"}
-        >
-          <Blob
-            w={"150%"}
-            h={"150%"}
-            position={"absolute"}
-            top={"-20%"}
-            left={0}
-            zIndex={-1}
-            color="#00BFFF"
-          />
-
-          <Box
+    <>
+      {isEdit && (
+        <>
+          <Button
             position={"relative"}
-            h="100%"
-            rounded={"2xl"}
-            boxShadow={"2xl"}
-            width={"full"}
-            overflow={"hidden"}
+            transform="translate(10%, 120%)"
+            zIndex={99}
+            onClick={() => setModal(true)}
           >
-            <IconButton
-              aria-label={"Play Button"}
-              variant={"ghost"}
-              _hover={{ bg: "transparent" }}
-              icon={<PlayIcon w={12} h={12} />}
-              size={"lg"}
-              color={"white"}
+            Editar
+          </Button>
+          <Form />
+        </>
+      )}
+      <Container maxW={"7xl"} mt="3em" id="eventosId">
+        <Heading
+          lineHeight={1.1}
+          fontWeight={600}
+          fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}
+          textAlign="start"
+        >
+          <Text
+            as={"span"}
+            bgGradient="linear(to-r, #FF7F00, #FFD700, #00BFFF, #9901F6)"
+            bgClip="text"
+          >
+            Próximos Eventos
+          </Text>{" "}
+        </Heading>
+        <Stack
+          align={"center"}
+          spacing={{ base: 10, md: 20 }}
+          py={{ base: 30, md: 30 }}
+          direction={{ base: "column", md: "row" }}
+        >
+          <Stack flex={1} spacing={{ base: 10, md: 10 }}></Stack>
+
+          <Flex
+            flex={1}
+            justify={"center"}
+            align={"center"}
+            position={"relative"}
+            w={"full"}
+          >
+            <Blob
+              w={"150%"}
+              h={"150%"}
               position={"absolute"}
-              left={"50%"}
-              top={"50%"}
-              transform={"translateX(-50%) translateY(-50%)"}
+              top={"-20%"}
+              left={0}
+              zIndex={-1}
+              color="#00BFFF"
             />
-            <Carousel />
-          </Box>
-        </Flex>
-      </Stack>
-    </Container>
+
+            <Box
+              position={"relative"}
+              h="100%"
+              rounded={"2xl"}
+              boxShadow={"2xl"}
+              width={"full"}
+              overflow={"hidden"}
+            >
+              <IconButton
+                aria-label={"Play Button"}
+                variant={"ghost"}
+                _hover={{ bg: "transparent" }}
+                icon={<PlayIcon w={12} h={12} />}
+                size={"lg"}
+                color={"white"}
+                position={"absolute"}
+                left={"50%"}
+                top={"50%"}
+                transform={"translateX(-50%) translateY(-50%)"}
+              />
+              <Carousel />
+            </Box>
+          </Flex>
+        </Stack>
+      </Container>
+    </>
   );
 }
 

@@ -13,10 +13,12 @@ import {
   Input,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Grid,
   SimpleGrid,
   Stack,
   Text,
@@ -30,9 +32,15 @@ import { useState } from "react";
 import InputMask from "react-input-mask";
 import * as Yup from "yup";
 
-export default function Forms({ data }) {
+import { v4 as uuidv4 } from "uuid";
+
+import { toBase64 } from "../utils/base64";
+
+export default function Forms({ data, setData = () => {}, isEdit = false }) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+
+  const [modal, setModal] = useState(false);
 
   const ModalAnimate = motion.div;
 
@@ -108,8 +116,145 @@ export default function Forms({ data }) {
     },
   };
 
+  function FormEdit() {
+    const [edited, setEdited] = useState(data);
+    console.log(edited);
+    async function selectFile(id, event) {
+      if (event.target.files.length == 0) return;
+
+      const base64 = await toBase64(event.target.files[0]);
+      const objectUrl = URL.createObjectURL(event.target.files[0]);
+      if (id) {
+        edited.form.avatar = edited.form.avatar.map((reg) => {
+          if (reg.id == id) {
+            reg.base64 = base64;
+            reg.src = objectUrl;
+          }
+          return reg;
+        });
+      } else {
+        edited.form.banner = objectUrl;
+        edited.form.base64 = base64;
+      }
+      setEdited((prev) => ({ ...prev, form: edited.form }));
+    }
+
+    function changeValue(id, event) {
+      const target = event.target;
+      const inputName = target.name;
+      const value = target.value;
+      edited.form[inputName] = value;
+
+      setEdited((prev) => ({ ...prev, form: edited.form }));
+    }
+    return (
+      <Modal
+        isOpen={modal}
+        isCentered
+        onClose={() => setModal(false)}
+        size="full"
+      >
+        <ModalOverlay />
+        <ModalContent width="100%">
+          <ModalCloseButton />
+          <ModalHeader>Alteração</ModalHeader>
+          <ModalBody overflow={"scroll"} width="100%">
+            <Grid
+              width="100%"
+              alignItems="center"
+              justifyContent={"space-between"}
+              gap={2}
+              templateColumns="repeat(3, 1fr)"
+            >
+              {data.form.avatar.map((avatar) => (
+                <Flex
+                  flexDirection={"column"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  gap={2}
+                  background={"#CCC"}
+                  rounded={"10px"}
+                  paddingBottom={5}
+                  paddingX={3}
+                  key={avatar.id}
+                >
+                  {avatar.src && (
+                    <Image
+                      src={avatar.src}
+                      marginTop="10px"
+                      height="auto"
+                      width="64px"
+                      height="64px"
+                      rounded="full"
+                    />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(el) => selectFile(avatar.id, el)}
+                  />
+                </Flex>
+              ))}
+            </Grid>
+            <Flex
+              marginTop="50px"
+              flexDirection={"column"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              gap={2}
+              background={"#CCC"}
+              rounded={"10px"}
+              paddingY={5}
+              paddingX={3}
+            >
+              <Image
+                src={data.form.banner}
+                height="auto"
+                width="20%"
+                rounded={"10px"}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(el) => selectFile(null, el)}
+              />
+
+              <Input
+                marginY="30px"
+                background={"#ffffff"}
+                defaultValue={data.form.h1}
+                name={`h1`}
+                onChange={(event) => changeValue(null, event)}
+              />
+
+              <Input
+                marginY="30px"
+                background={"#ffffff"}
+                defaultValue={data.form.h2}
+                name={`h2`}
+                onChange={(event) => changeValue(null, event)}
+              />
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
+  }
   return (
     <Box position={"relative"} id="conviteId">
+      {isEdit && (
+        <>
+          <Button
+            position={"relative"}
+            transform="translate(10%, 120%)"
+            zIndex={99}
+            onClick={() => setModal(true)}
+          >
+            Editar
+          </Button>
+          <FormEdit />
+        </>
+      )}
       <Container
         as={SimpleGrid}
         maxW={"7xl"}

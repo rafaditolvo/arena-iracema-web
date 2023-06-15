@@ -33,10 +33,22 @@ function Config() {
       ) : (
         <ImageCarousel data={data} setData={setData} isEdit={true} />
       )}
-      {isLoading ? <Placeholder /> : <Forms data={data} setData={setData} />}
-      {isLoading ? <Placeholder /> : <Hero data={data} setData={setData} />}
-      {isLoading ? <Placeholder /> : <Sobre data={data} setData={setData} />}
-      {isLoading ? <Placeholder /> : <Footer data={data} />}
+      {isLoading ? (
+        <Placeholder />
+      ) : (
+        <Forms data={data} setData={setData} isEdit={true} />
+      )}
+      {isLoading ? (
+        <Placeholder />
+      ) : (
+        <Hero data={data} setData={setData} isEdit={true} />
+      )}
+      {isLoading ? (
+        <Placeholder />
+      ) : (
+        <Sobre data={data} setData={setData} isEdit={true} />
+      )}
+      {isLoading ? <Placeholder /> : <Footer data={data} isEdit={true} />}
     </div>
   );
 }
