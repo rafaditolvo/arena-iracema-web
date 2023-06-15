@@ -23,10 +23,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import { toBase64 } from "../../utils/base64";
 
-const token = JSON.parse(
-  localStorage.getItem("@mob_landpage_f0552434361ccf7da13bdece6f1efddc")
-);
-
 export default function ImageCarousel({
   data,
   setData = () => {},
@@ -118,9 +114,6 @@ export default function ImageCarousel({
   function Form() {
     const [edited, setEdited] = useState(data);
 
-    const [image, setImage] = useState({
-      currentFile: null,
-    });
     async function selectFile(id, event) {
       const base64 = await toBase64(event.target.files[0]);
       const objectUrl = URL.createObjectURL(event.target.files[0]);
