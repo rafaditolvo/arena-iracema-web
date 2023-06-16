@@ -10,7 +10,7 @@ import ImageCarousel from "./components/img/ImageCarousel";
 
 import { fetchJSON } from "./services/fetchJson";
 import UploadService from "./services/fileUpload";
-const dataJson = require("./data.json");
+// const dataJson = require("./data.json");
 
 const Placeholder = () => (
   <Box padding="6" boxShadow="lg" bg="white">
@@ -20,7 +20,7 @@ const Placeholder = () => (
 
 function Config({ setInvalidAuth, token, tokenExpired, backMenu }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(dataJson);
+  const [data, setData] = useState({});
   const [isSave, setIsSave] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -45,10 +45,16 @@ function Config({ setInvalidAuth, token, tokenExpired, backMenu }) {
   }
 
   useEffect(() => {
-    setTimeout(() => {
+    const fetchData = async () => {
+      const response = await fetch("/data.json");
+      const jsonData = await response.json();
+      setData(jsonData);
       setIsLoading(false);
-    }, 100);
-    loopIsAuth();
+
+      loopIsAuth();
+    };
+
+    fetchData();
     return () => {
       clearInterval(intervalIsAuth.current);
     };
