@@ -28,7 +28,6 @@ export default function ImageCarousel({
   setData = () => {},
   isEdit = false,
 }) {
-  console.log("data", data);
   const [modal, setModal] = useState(false);
   if (!data) {
     return <div>Propriedade 'data' não fornecida.</div>;
@@ -122,6 +121,8 @@ export default function ImageCarousel({
         if (reg.id == id) {
           reg.base64 = base64;
           reg.src = objectUrl;
+          reg.fileType = event.target.files[0].type;
+          reg.fileName = event.target.files[0].name;
         }
         return reg;
       });
@@ -158,7 +159,7 @@ export default function ImageCarousel({
       newBanner.banner = newBanner.banner.filter((e) => e.id != id);
       setEdited(newBanner);
     }
-    // console.log(data);
+
     return (
       <Modal
         isOpen={modal}

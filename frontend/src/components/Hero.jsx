@@ -51,8 +51,6 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
     return <div>Propriedade 'data' não fornecida.</div>;
   }
 
-  console.log(data.events);
-
   const Carousel = () => {
     const settings = {
       //infinite: true,
@@ -90,10 +88,12 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
         if (reg.id == id) {
           reg.base64 = base64;
           reg.src = objectUrl;
+          reg.fileType = event.target.files[0].type;
+          reg.fileName = event.target.files[0].name;
         }
         return reg;
       });
-      setEdited((prev) => ({ ...prev, banner: newBanner }));
+      setEdited((prev) => ({ ...prev, events: newBanner }));
     }
 
     function addNew() {
@@ -110,7 +110,6 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
       newBanner.events = newBanner.events.filter((e) => e.id != id);
       setEdited(newBanner);
     }
-    // console.log(data);
     return (
       <Modal
         isOpen={modal}

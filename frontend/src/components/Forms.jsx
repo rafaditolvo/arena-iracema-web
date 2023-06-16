@@ -71,23 +71,28 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
 `;
 
   const onSubmit = (values) => {
-    console.log(values);
     // Lógica de envio do formulário aqui
   };
 
   const handleSubmit = async (formData) => {
     try {
+      const token =
+        "8d60f6a35bbe4d4d755f046699043fc5dd2d73c241287f483865adf9a964d8454d30e9b742dd6f310ec51f0bf97e021813a49e53726b56289dbf3a0a80cfb03e";
+      // const token = await generateToken();
       const response = await axios.post(
-        "http://localhost:4000/formulario",
-        formData
+        `https://mpdbrelos2zfgh6vztsbzwfuu40qistr.lambda-url.us-east-2.on.aws/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log(response.data);
+      // const debug = response.data;
       openSuccessModal();
-      // Faça algo com a resposta recebida, se necessário
     } catch (error) {
-      console.error(error);
       openErrorModal();
-      // Lide com erros, se houver algum
     }
   };
 
@@ -126,11 +131,13 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
           if (reg.id == id) {
             reg.base64 = base64;
             reg.src = objectUrl;
+            reg.fileType = event.target.files[0].type;
+            reg.fileName = event.target.files[0].name;
           }
           return reg;
         });
       } else {
-        edited.form.banner = objectUrl;
+        edited.form.src = objectUrl;
         edited.form.base64 = base64;
       }
       setEdited((prev) => ({ ...prev, form: edited.form }));
@@ -207,7 +214,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               paddingX={3}
             >
               <Image
-                src={edited.form.banner}
+                src={edited.form.src}
                 height="auto"
                 width="20%"
                 rounded={"10px"}
@@ -337,7 +344,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
             align={"center"}
             w={"100%"}
             h="100%"
-            src={data.form?.banner}
+            src={data.form?.src}
           />
         </Stack>
         <Stack
