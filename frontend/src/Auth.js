@@ -71,7 +71,7 @@ function Auth() {
       body: JSON.stringify({ login: credentials.user, pass: credentials.pass }),
     };
     const response = await fetch(
-      "https://owa4t6eb4mlyrrvmxnn4vtusm40mjjih.lambda-url.us-east-2.on.aws/auth",
+      "https://apsrwvwrccgyjgoj4hc2oltbbu0krhgd.lambda-url.us-east-1.on.aws//auth",
       options
     );
     const status = await response.status;
@@ -85,16 +85,13 @@ function Auth() {
     setAuth((prev) => jsonData.token);
     setError(false);
     localStorage.setItem(
-      "@mob_landpage_f0552434361ccf7da13bdece6f1efddc",
+      "@landpage_f0552434361ccf7da13bdece6f1efddc",
       JSON.stringify(jsonData.token)
     );
   }
 
   function setInvalidToken() {
-    localStorage.setItem(
-      "@mob_landpage_f0552434361ccf7da13bdece6f1efddc",
-      null
-    );
+    localStorage.setItem("@landpage_f0552434361ccf7da13bdece6f1efddc", null);
     setAuth(false);
   }
 
@@ -121,7 +118,7 @@ function Auth() {
       body: JSON.stringify({ monthRef: monthRefValue }),
     };
     const response = await fetch(
-      "https://owa4t6eb4mlyrrvmxnn4vtusm40mjjih.lambda-url.us-east-2.on.aws/exportcsv",
+      "https://apsrwvwrccgyjgoj4hc2oltbbu0krhgd.lambda-url.us-east-1.on.aws/exportcsv",
       options
     );
     const status = await response.status;
@@ -147,7 +144,7 @@ function Auth() {
 
   useEffect(() => {
     const authStorage = JSON.parse(
-      localStorage.getItem("@mob_landpage_f0552434361ccf7da13bdece6f1efddc")
+      localStorage.getItem("@landpage_f0552434361ccf7da13bdece6f1efddc")
     );
     if (authStorage && authStorage != "") {
       if (tokenExpired(authStorage)) {

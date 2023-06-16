@@ -80,7 +80,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
         "8d60f6a35bbe4d4d755f046699043fc5dd2d73c241287f483865adf9a964d8454d30e9b742dd6f310ec51f0bf97e021813a49e53726b56289dbf3a0a80cfb03e";
       // const token = await generateToken();
       const response = await axios.post(
-        `https://mpdbrelos2zfgh6vztsbzwfuu40qistr.lambda-url.us-east-2.on.aws/`,
+        `https://ovsxxbefxf24c5jquasfca5e440xgmhp.lambda-url.us-east-1.on.aws/`,
         formData,
         {
           headers: {

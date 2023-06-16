@@ -8,7 +8,7 @@ async function fetchJSON(token, json) {
     body: JSON.stringify(json),
   };
   const response = await fetch(
-    "https://owa4t6eb4mlyrrvmxnn4vtusm40mjjih.lambda-url.us-east-2.on.aws/save",
+    "https://apsrwvwrccgyjgoj4hc2oltbbu0krhgd.lambda-url.us-east-1.on.aws/save",
     options
   );
   const status = await response.status;
