@@ -97,25 +97,28 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
     }
 
     function addNew() {
-      const newBanner = { ...data };
+      const newBanner = { ...edited };
       newBanner.events.push({
         id: uuidv4(),
         src: "",
       });
 
-      setData(newBanner);
+      setEdited(newBanner);
     }
     function remove(id) {
-      const newBanner = { ...data };
+      const newBanner = { ...edited };
       newBanner.events = newBanner.events.filter((e) => e.id != id);
-      setData(newBanner);
+      setEdited(newBanner);
     }
     // console.log(data);
     return (
       <Modal
         isOpen={modal}
         isCentered
-        onClose={() => setModal(false)}
+        onClose={() => {
+          setData(edited);
+          setModal(false);
+        }}
         width="100%"
         size={"lg"}
       >
@@ -135,7 +138,7 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
               justifyContent={"space-between"}
               gap={4}
             >
-              {data.events.map((banner) => (
+              {edited.events.map((banner) => (
                 <Flex
                   flexDirection={"column"}
                   alignItems={"center"}

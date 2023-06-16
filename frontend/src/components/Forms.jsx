@@ -7,6 +7,7 @@ import {
   Center,
   Container,
   Flex,
+  Grid,
   Heading,
   Icon,
   Image,
@@ -18,7 +19,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Grid,
   SimpleGrid,
   Stack,
   Text,
@@ -31,8 +31,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import InputMask from "react-input-mask";
 import * as Yup from "yup";
-
-import { v4 as uuidv4 } from "uuid";
 
 import { toBase64 } from "../utils/base64";
 
@@ -118,7 +116,6 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
 
   function FormEdit() {
     const [edited, setEdited] = useState(data);
-    console.log(edited);
     async function selectFile(id, event) {
       if (event.target.files.length == 0) return;
 
@@ -151,7 +148,10 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
       <Modal
         isOpen={modal}
         isCentered
-        onClose={() => setModal(false)}
+        onClose={() => {
+          setData(edited);
+          setModal(false);
+        }}
         size="full"
       >
         <ModalOverlay />
@@ -166,7 +166,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               gap={2}
               templateColumns="repeat(3, 1fr)"
             >
-              {data.form.avatar.map((avatar) => (
+              {edited.form.avatar.map((avatar) => (
                 <Flex
                   flexDirection={"column"}
                   alignItems={"center"}
@@ -182,7 +182,6 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                     <Image
                       src={avatar.src}
                       marginTop="10px"
-                      height="auto"
                       width="64px"
                       height="64px"
                       rounded="full"
@@ -208,7 +207,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               paddingX={3}
             >
               <Image
-                src={data.form.banner}
+                src={edited.form.banner}
                 height="auto"
                 width="20%"
                 rounded={"10px"}
@@ -222,7 +221,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               <Input
                 marginY="30px"
                 background={"#ffffff"}
-                defaultValue={data.form.h1}
+                defaultValue={edited.form.h1}
                 name={`h1`}
                 onChange={(event) => changeValue(null, event)}
               />
@@ -230,7 +229,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               <Input
                 marginY="30px"
                 background={"#ffffff"}
-                defaultValue={data.form.h2}
+                defaultValue={edited.form.h2}
                 name={`h2`}
                 onChange={(event) => changeValue(null, event)}
               />
@@ -338,9 +337,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
             align={"center"}
             w={"100%"}
             h="100%"
-            src={
-              "https://arenadeiracema.plix.bio/u/p_1849_68132167162053410854264.41962711.png"
-            }
+            src={data.form?.banner}
           />
         </Stack>
         <Stack

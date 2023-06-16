@@ -28,6 +28,7 @@ export default function ImageCarousel({
   setData = () => {},
   isEdit = false,
 }) {
+  console.log("data", data);
   const [modal, setModal] = useState(false);
   if (!data) {
     return <div>Propriedade 'data' não fornecida.</div>;
@@ -117,7 +118,7 @@ export default function ImageCarousel({
     async function selectFile(id, event) {
       const base64 = await toBase64(event.target.files[0]);
       const objectUrl = URL.createObjectURL(event.target.files[0]);
-      const newBanner = edited.banner.map((reg) => {
+      const newBanner = { ...edited }.banner.map((reg) => {
         if (reg.id == id) {
           reg.base64 = base64;
           reg.src = objectUrl;
@@ -125,18 +126,12 @@ export default function ImageCarousel({
         return reg;
       });
       setEdited((prev) => ({ ...prev, banner: newBanner }));
-      // setImage({
-      //   currentFile: event.target.files[0],
-      //   previewImage: URL.createObjectURL(event.target.files[0]),
-      //   progress: 0,
-      //   message: "",
-      // });
     }
     function changeValue(id, event) {
       const target = event.target;
       const inputName = target.name;
       const value = target.value;
-      const newBanner = edited.banner.map((reg) => {
+      const newBanner = { ...edited }.banner.map((reg) => {
         if (reg.id == id) {
           reg[inputName] = value;
           if (inputName == "buttonText" && value == "") {
@@ -146,30 +141,32 @@ export default function ImageCarousel({
         return reg;
       });
       setEdited((prev) => ({ ...prev, banner: newBanner }));
-      // console.log(newBanner);
     }
 
     function addNew() {
-      const newBanner = { ...data };
+      const newBanner = { ...edited };
       newBanner.banner.push({
         id: uuidv4(),
         src: "",
         href: "#",
       });
 
-      setData(newBanner);
+      setEdited(newBanner);
     }
     function remove(id) {
-      const newBanner = { ...data };
+      const newBanner = { ...edited };
       newBanner.banner = newBanner.banner.filter((e) => e.id != id);
-      setData(newBanner);
+      setEdited(newBanner);
     }
     // console.log(data);
     return (
       <Modal
         isOpen={modal}
         isCentered
-        onClose={() => setModal(false)}
+        onClose={() => {
+          setData(edited);
+          setModal(false);
+        }}
         width="100%"
       >
         <ModalOverlay />
@@ -188,7 +185,7 @@ export default function ImageCarousel({
               justifyContent={"space-between"}
               gap={4}
             >
-              {data.banner.map((banner) => (
+              {edited.banner.map((banner) => (
                 <Flex
                   flexDirection={"column"}
                   alignItems={"center"}
