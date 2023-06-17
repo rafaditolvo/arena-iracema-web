@@ -16,6 +16,11 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
   Stack,
   Text,
   useColorModeValue,
@@ -44,66 +49,6 @@ function Navbar() {
       elementId: "eventosId",
     },
   ];
-
-  const DesktopNav = () => {
-    const linkColor = useColorModeValue("gray.600", "gray.200");
-    const linkHoverColor = useColorModeValue("gray.800", "white");
-    const popoverContentBgColor = useColorModeValue("white", "gray.800");
-
-    const handleClickScroll = (elementId) => {
-      const element = document.getElementById(elementId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    };
-
-    return (
-      <Stack direction={"row"} mb="2em" spacing={4}>
-        {NAV_ITEMS.map((navItem) => (
-          <Box key={navItem.label}>
-            <Popover trigger={"hover"} placement={"bottom-start"}>
-              <PopoverTrigger>
-                <Button
-                  p={2}
-                  fontSize={"sm"}
-                  fontWeight={500}
-                  variant="link"
-                  color={linkColor}
-                  _hover={{
-                    textDecoration: "none",
-                    color: linkHoverColor,
-                  }}
-                  className="button-hover" // Adicione esta linha
-                  onClick={() => {
-                    handleClickScroll(navItem.elementId);
-                  }}
-                >
-                  {navItem.label}
-                </Button>
-              </PopoverTrigger>
-
-              {navItem.children && (
-                <PopoverContent
-                  border={0}
-                  boxShadow={"xl"}
-                  bg={popoverContentBgColor}
-                  p={4}
-                  rounded={"xl"}
-                  minW={"sm"}
-                >
-                  <Stack>
-                    {navItem.children.map((child) => (
-                      <DesktopSubNav key={child.label} {...child} />
-                    ))}
-                  </Stack>
-                </PopoverContent>
-              )}
-            </Popover>
-          </Box>
-        ))}
-      </Stack>
-    );
-  };
 
   const DesktopSubNav = ({ label, href, subLabel }, NavItem) => {
     return (
@@ -142,18 +87,132 @@ function Navbar() {
     );
   };
 
-  const MobileNav = () => {
+
+  const DesktopNav = () => {
+    const linkColor = useColorModeValue("gray.600", "gray.200");
+    const linkHoverColor = useColorModeValue("gray.800", "white");
+    const popoverContentBgColor = useColorModeValue("white", "gray.800");
+
+    const handleClickScroll = (elementId) => {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
     return (
-      <Stack
-        bg={useColorModeValue("white", "gray.800")}
-        p={4}
-        display={{ md: "none" }}
-        //className="navbar"
-      >
+      <Stack direction={"row"} mb="2em" spacing={4}>
         {NAV_ITEMS.map((navItem) => (
-          <MobileNavItem key={navItem.label} {...navItem} />
+          <Box key={navItem.label}>
+            <Popover trigger={"hover"} placement={"bottom-start"}>
+              <PopoverTrigger>
+                <Button
+                  p={2}
+                  fontSize={"sm"}
+                  fontWeight={500}
+                  variant="link"
+                  color={linkColor}
+                  _hover={{
+                    textDecoration: "none",
+                    color: linkHoverColor,
+                  }}
+                  className="button-hover" // Adicione esta linha
+                  onClick={() => {
+                    handleClickScroll(navItem.elementId);
+                  }}
+                >
+                  {navItem.label}
+                
+                </Button>
+              </PopoverTrigger>
+
+              {navItem.children && (
+                <PopoverContent
+                  border={0}
+                  boxShadow={"xl"}
+                  bg={popoverContentBgColor}
+                  p={4}
+                  rounded={"xl"}
+                  minW={"sm"}
+                  
+                >
+                  <Stack>
+                    {navItem.children.map((child) => (
+                      <DesktopSubNav  key={child.label} {...child} />
+                    ))}
+                  </Stack>
+                </PopoverContent>
+              )}
+            </Popover>
+          </Box>
         ))}
       </Stack>
+    );
+  };
+
+
+  const MobileNav = () => {
+    const linkColor = useColorModeValue("gray.600", "gray.200");
+    const linkHoverColor = useColorModeValue("gray.800", "white");
+    const popoverContentBgColor = useColorModeValue("white", "gray.800");
+    const handleClickScroll = (elementId) => {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    return (
+      <Accordion>  
+         <AccordionItem>
+        <Stack direction={"column"} mb="2em" spacing={4}>
+      {NAV_ITEMS.map((navItem) => (
+        <Box key={navItem.label}>
+          <Popover trigger={"hover"} placement={"bottom-start"}>
+            <PopoverTrigger>
+              <Button
+                p={2}
+                fontSize={"sm"}
+                fontWeight={500}
+                variant="link"
+                color={linkColor}
+                _hover={{
+                  textDecoration: "none",
+                  color: linkHoverColor,
+                }}
+                className="button-hover" // Adicione esta linha
+                onClick={() => {
+                  handleClickScroll(navItem.elementId);
+                }}
+              >
+                {navItem.label}
+              
+              </Button>
+            </PopoverTrigger>
+
+            {navItem.children && (
+              <PopoverContent
+                border={0}
+                boxShadow={"xl"}
+                bg={popoverContentBgColor}
+                p={4}
+                rounded={"xl"}
+                minW={"sm"}
+                
+              >
+                <Stack>
+                  {navItem.children.map((child) => (
+                    <DesktopSubNav  key={child.label} {...child} />
+                  ))}
+                </Stack>
+              </PopoverContent>
+            )}
+          </Popover>
+        </Box>
+      ))}
+    </Stack>
+    </AccordionItem>
+    </Accordion>
+      
     );
   };
 
