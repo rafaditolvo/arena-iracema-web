@@ -96,13 +96,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
     }
   };
 
-  // Exemplo de uso
-  const formData = {
-    email: "example@example.com",
-    nome: "Fulano de Tal",
-    dataAniversario: "1990-01-01",
-  };
-
+ 
   const validationSchema = Yup.object().shape({
     firstname: Yup.string().required("Campo obrigatório"),
     email: Yup.string().email("Email inválido").required("Campo obrigatório"),
@@ -447,6 +441,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               {({ errors, touched, isValid }) => (
                 <Form>
                   <Stack spacing={4}>
+                  <Text size="sm" mt="0.5em" color="blue" >Seu Nome </Text>
                     <Field
                       as={Input}
                       name="firstname" // Corrigido para "firstname"
@@ -465,11 +460,11 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                         color="red"
                       />
                     )}
-
+<Text size="sm" mt="1em" color="blue"  >O seu melhor e-mail! </Text>
                     <Field
                       as={Input}
                       name="email"
-                      placeholder="O seu Melhor E-mail!"
+                      placeholder="E-mail"
                       bg="gray.100"
                       border={0}
                       color="gray.500"
@@ -480,7 +475,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                     {errors.email && touched.email && (
                       <ErrorMessage component="span" name="email" color="red" />
                     )}
-
+<Text size="sm" mt="1em" color="blue" >Telefone </Text>
                     <Field name="phone">
                       {({ field }) => (
                         <Input
@@ -500,15 +495,17 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                     {errors.phone && touched.phone && (
                       <ErrorMessage component="span" name="phone" color="red" />
                     )}
-
+ <Text size="sm" mt="1em" color="blue">Data de Aniversário </Text>
                     <Field
                       as={Input}
                       name="dob"
                       type="date"
                       bg="gray.100"
+                      placeholder="Data de Aniversário"
                       border={0}
                       color="gray.500"
                     />
+                   
                     {errors.dob && touched.dob && (
                       <ErrorMessage component="span" name="dob" color="red" />
                     )}

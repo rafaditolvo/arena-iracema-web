@@ -59,6 +59,10 @@ const SocialButton = ({
 };
 
 export default function SmallWithLogoLeft({data}) {
+
+
+
+ 
   return (
     <Box
       bg={useColorModeValue('gray.50', 'gray.900')}
@@ -80,15 +84,15 @@ export default function SmallWithLogoLeft({data}) {
           >
            
           </Image>
-        <Text>© 2023 Arena de Iracema. All rights reserved</Text>
+        <Text>© 2023 Arena de Iracema. Todos os Direitos Reservados.</Text>
         <Stack direction={'row'} spacing={6}>
-          <SocialButton label={'Twitter'} href={'#'}>
+          <SocialButton label={'Twitter'} href={data.footer[0].twitter}>
             <FaTwitter />
           </SocialButton>
-          <SocialButton label={'YouTube'} href={'#'}>
+          <SocialButton label={'YouTube'} href={data.footer[0].youtube}>
             <FaYoutube />
           </SocialButton>
-          <SocialButton label={'Instagram'} href={'#'}>
+          <SocialButton label={'Instagram'} href={data.footer[0].instagram}>
             <FaInstagram />
           </SocialButton>
         </Stack>

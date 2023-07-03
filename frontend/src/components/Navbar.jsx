@@ -9,6 +9,7 @@ import {
   Button,
   Collapse,
   Flex,
+  Center,
   Icon,
   IconButton,
   Image,
@@ -26,13 +27,14 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import {useState, useEffect} from "react";
 
 import "../App.css";
-import logo from "../components/img/logo.svg";
+import logo from "../components/img/logo.svg"; 
 
 function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
+  const [isMobile, setIsMobile] = useState(false);
 
   const NAV_ITEMS = [
     {
@@ -86,6 +88,54 @@ function Navbar() {
       </Link>
     );
   };
+
+  const SpotifyPlaylist = () => (
+<iframe
+      style={{
+        borderRadius: "12px",
+       
+      }}
+      src="https://open.spotify.com/embed/playlist/0pJFMZF87DSj7a5ZiHbQfD?utm_source=generator&theme=1"
+      width= "50%"
+      height="80vh" // Ajuste a altura aqui
+    
+      frameBorder="0"
+      allowFullScreen=""
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    ></iframe>
+  );
+
+  const SpotifyPlaylistMobile = () => (
+    <Center mt="1em" mb="1em"><iframe
+          style={{
+            borderRadius: "12px",
+           
+          }}
+          src="https://open.spotify.com/embed/playlist/0pJFMZF87DSj7a5ZiHbQfD?utm_source=generator&theme=1"
+          width= "95%"
+          height="80vh" // Ajuste a altura aqui
+        
+          frameBorder="0"
+          allowFullScreen=""
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe></Center>    
+      );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 868); 
+    };
+
+    handleResize(); 
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize); 
+    };
+  }, []);
 
 
   const DesktopNav = () => {
@@ -150,17 +200,20 @@ function Navbar() {
     );
   };
 
-
-  const MobileNav = () => {
+  const MobileNav = () => { 
     const linkColor = useColorModeValue("gray.600", "gray.200");
     const linkHoverColor = useColorModeValue("gray.800", "white");
     const popoverContentBgColor = useColorModeValue("white", "gray.800");
+
+
     const handleClickScroll = (elementId) => {
       const element = document.getElementById(elementId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     };
+
+
     return (
       <Accordion>  
          <AccordionItem>
@@ -275,6 +328,7 @@ function Navbar() {
   return (
     <Box //className="navbar"
     >
+      
       <Flex
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}
@@ -291,6 +345,7 @@ function Navbar() {
           ml={{ base: -2 }}
           display={{ base: "flex", md: "none" }}
         >
+         
           <IconButton
             onClick={onToggle}
             icon={
@@ -299,6 +354,7 @@ function Navbar() {
             variant={"ghost"}
             aria-label={"Toggle Navigation"}
           />
+        
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
           <Image
@@ -313,19 +369,23 @@ function Navbar() {
             <DesktopNav />
           </Flex>
         </Flex>
-
         <Stack
           flex={{ base: 1, md: 0 }}
           justify={"flex-end"}
           direction={"row"}
           spacing={6}
         ></Stack>
+       {isMobile ? <></> : <SpotifyPlaylist/> } 
       </Flex>
-
+     
       <Collapse in={isOpen} animateOpacity>
         <MobileNav />
+        
       </Collapse>
+       {isMobile ? <SpotifyPlaylistMobile/> : <></>} 
+
     </Box>
+    
   );
 }
 

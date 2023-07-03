@@ -1,6 +1,7 @@
 .app-container {
-    overflow-x: hidden;
-  }
+  overflow-x: hidden;
+}
+
   
   .navbar {
     position: fixed;
@@ -36,5 +37,7 @@
 .phone-input::placeholder {
   color: gray.500;
 }
+
+
 
   
