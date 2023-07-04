@@ -34,7 +34,7 @@ import * as Yup from "yup";
 
 import { toBase64 } from "../utils/base64";
 
-export default function Forms({ data, setData = () => {}, isEdit = false }) {
+export default function Forms({ data, setData = () => { }, isEdit = false }) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -96,7 +96,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
     }
   };
 
- 
+
   const validationSchema = Yup.object().shape({
     firstname: Yup.string().required("Campo obrigatório"),
     email: Yup.string().email("Email inválido").required("Campo obrigatório"),
@@ -160,6 +160,146 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
           <ModalCloseButton />
           <ModalHeader>Alteração</ModalHeader>
           <ModalBody overflow={"scroll"} width="100%">
+            <ModalHeader>
+              <Text
+                as={"span"}
+                bgGradient="linear(to-r, #FF7F00, #FFD700, #00BFFF, #9901F6)"
+                bgClip="text"
+                fontSize={{ base: "5xl", sm: "4xl", md: "5xl", lg: "6xl" }}
+              >
+                {edited.form.title}
+              </Text>
+            </ModalHeader>
+            <Flex
+              flexDirection={"column"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              gap={4}
+              background={"#CCC"}
+              rounded={"10px"}
+              paddingY={5}
+              paddingX={3}
+            >
+              <Input
+                background={"#ffffff"}
+                defaultValue={edited.form.title}
+                name={`title`}
+                onChange={(event) => changeValue(null, event)}
+              />
+              <Input
+                background={"#ffffff"}
+                defaultValue={edited.form.h1}
+                name={`h1`}
+                onChange={(event) => changeValue(null, event)}
+              />
+
+              <Image
+                src={edited.form.src}
+                height="auto"
+                width="20%"
+                rounded={"10px"}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(el) => selectFile(null, el)}
+              />
+
+            </Flex>
+            <ModalHeader marginTop={'50px'}>
+              <Heading
+                color={"gray.800"}
+                lineHeight={1.1}
+                fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}
+              >
+                {edited.form.titleForm}
+                <Text
+                  as={"span"}
+                  bgGradient="linear-gradient(to bottom left, #FF7F00, #FFD700, #00BFFF, #9901F6)"
+                  bgClip="text"
+                >
+                  !
+                </Text>
+              </Heading>
+            </ModalHeader>
+            <Flex
+              flexDirection={"column"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              gap={2}
+              background={"#CCC"}
+              rounded={"10px"}
+              paddingY={2}
+              paddingX={2}
+            >
+              <Input
+                background={"#ffffff"}
+                defaultValue={edited.form.titleForm}
+                name={`titleForm`}
+                onChange={(event) => changeValue(null, event)}
+              />
+            </Flex>
+            <Stack marginTop={10} direction={"row"} spacing={4} align={"center"}>
+              <AvatarGroup>
+                {data.form?.avatar?.map((avatar) => (
+                  <Avatar
+                    key={avatar.id}
+                    name={avatar.id.toString()}
+                    src={avatar.src}
+                    size={{ base: "md", md: "lg" }}
+                    position={"relative"}
+                    zIndex={2}
+                    _before={{
+                      content: '""',
+                      width: "full",
+                      height: "full",
+                      rounded: "full",
+                      transform: "scale(1.125)",
+                      bgGradient:
+                        "linear-gradient(to bottom left, #FF7F00, #FFD700, #00BFFF, #9901F6)",
+                      position: "absolute",
+                      zIndex: -1,
+                      top: 0,
+                      left: 0,
+                    }}
+                  />
+                ))}
+              </AvatarGroup>
+
+              <Text
+                fontFamily={"heading"}
+                fontSize={{ base: "4xl", md: "6xl" }}
+              >
+                +
+              </Text>
+              <Flex
+                align={"center"}
+                justify={"center"}
+                fontFamily={"heading"}
+                fontSize={{ base: "sm", md: "lg" }}
+                bg={"gray.800"}
+                color={"white"}
+                rounded={"full"}
+                minWidth={{ base: "44px", md: "60px" }}
+                minHeight={{ base: "44px", md: "60px" }}
+                position={"relative"}
+                _before={{
+                  content: '""',
+                  width: "full",
+                  height: "full",
+                  rounded: "full",
+                  transform: "scale(1.125)",
+                  bgGradient:
+                    "linear-gradient(to bottom left, #FF7F00, #FFD700, #00BFFF, #9901F6)",
+                  position: "absolute",
+                  zIndex: -1,
+                  top: 0,
+                  left: 0,
+                }}
+              >
+                Você
+              </Flex>
+            </Stack>
             <Grid
               width="100%"
               alignItems="center"
@@ -176,18 +316,34 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                   background={"#CCC"}
                   rounded={"10px"}
                   paddingBottom={5}
+                  paddingTop={5}
                   paddingX={3}
                   key={avatar.id}
                 >
                   {avatar.src && (
-                    <Image
+                    <Avatar
+                      key={avatar.id}
+                      name={avatar.id.toString()}
                       src={avatar.src}
-                      marginTop="10px"
-                      width="64px"
-                      height="64px"
-                      rounded="full"
+                      size={{ base: "md", md: "lg" }}
+                      position={"relative"}
+                      zIndex={2}
+                      _before={{
+                        content: '""',
+                        width: "full",
+                        height: "full",
+                        rounded: "full",
+                        transform: "scale(1.125)",
+                        bgGradient:
+                          "linear-gradient(to bottom left, #FF7F00, #FFD700, #00BFFF, #9901F6)",
+                        position: "absolute",
+                        zIndex: -1,
+                        top: 0,
+                        left: 0,
+                      }}
                     />
                   )}
+
                   <input
                     type="file"
                     accept="image/*"
@@ -196,39 +352,19 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                 </Flex>
               ))}
             </Grid>
+
+            <ModalHeader marginTop="50px">Texto formulário</ModalHeader>
             <Flex
-              marginTop="50px"
               flexDirection={"column"}
               alignItems={"center"}
               justifyContent={"space-between"}
               gap={2}
               background={"#CCC"}
               rounded={"10px"}
-              paddingY={5}
-              paddingX={3}
+              paddingY={2}
+              paddingX={2}
             >
-              <Image
-                src={edited.form.src}
-                height="auto"
-                width="20%"
-                rounded={"10px"}
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(el) => selectFile(null, el)}
-              />
-
               <Input
-                marginY="30px"
-                background={"#ffffff"}
-                defaultValue={edited.form.h1}
-                name={`h1`}
-                onChange={(event) => changeValue(null, event)}
-              />
-
-              <Input
-                marginY="30px"
                 background={"#ffffff"}
                 defaultValue={edited.form.h2}
                 name={`h2`}
@@ -237,7 +373,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
             </Flex>
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal >
     );
   }
   return (
@@ -325,7 +461,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               bgClip="text"
               fontSize={{ base: "5xl", sm: "4xl", md: "5xl", lg: "6xl" }}
             >
-              Garanta seu Convite
+              {data.form?.title}
             </Text>{" "}
           </Heading>
           <Text color={"gray.500"} fontSize={{ base: "lg", sm: "lg" }} w="100%">
@@ -355,7 +491,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               lineHeight={1.1}
               fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}
             >
-              Só Falta Você
+              {data.form?.titleForm}
               <Text
                 as={"span"}
                 bgGradient="linear-gradient(to bottom left, #FF7F00, #FFD700, #00BFFF, #9901F6)"
@@ -441,7 +577,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
               {({ errors, touched, isValid }) => (
                 <Form>
                   <Stack spacing={4}>
-                  <Text size="sm" mt="0.5em" color="blue" >Seu Nome </Text>
+                    <Text size="sm" mt="0.5em" color="blue" >Seu Nome </Text>
                     <Field
                       as={Input}
                       name="firstname" // Corrigido para "firstname"
@@ -460,7 +596,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                         color="red"
                       />
                     )}
-<Text size="sm" mt="1em" color="blue"  >O seu melhor e-mail! </Text>
+                    <Text size="sm" mt="1em" color="blue"  >O seu melhor e-mail! </Text>
                     <Field
                       as={Input}
                       name="email"
@@ -475,7 +611,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                     {errors.email && touched.email && (
                       <ErrorMessage component="span" name="email" color="red" />
                     )}
-<Text size="sm" mt="1em" color="blue" >Telefone </Text>
+                    <Text size="sm" mt="1em" color="blue" >Telefone </Text>
                     <Field name="phone">
                       {({ field }) => (
                         <Input
@@ -495,7 +631,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                     {errors.phone && touched.phone && (
                       <ErrorMessage component="span" name="phone" color="red" />
                     )}
- <Text size="sm" mt="1em" color="blue">Data de Aniversário </Text>
+                    <Text size="sm" mt="1em" color="blue">Data de Aniversário </Text>
                     <Field
                       as={Input}
                       name="dob"
@@ -505,7 +641,7 @@ export default function Forms({ data, setData = () => {}, isEdit = false }) {
                       border={0}
                       color="gray.500"
                     />
-                   
+
                     {errors.dob && touched.dob && (
                       <ErrorMessage component="span" name="dob" color="red" />
                     )}

@@ -2,12 +2,14 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Flex,
   Grid,
   Heading,
   Icon,
   IconButton,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -45,7 +47,7 @@ export const Blur = (props) => {
   );
 };
 
-export default function Hero({ data, setData = () => {}, isEdit = false }) {
+export default function Hero({ data, setData = () => { }, isEdit = false }) {
   const [modal, setModal] = useState(false);
   if (!data) {
     return <div>Propriedade 'data' não fornecida.</div>;
@@ -81,6 +83,14 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
   function Form() {
     const [edited, setEdited] = useState(data);
 
+    function changeValue(id, event) {
+      const target = event.target;
+      const inputName = target.name;
+      const value = target.value;
+      // edited.eventsTitle = value;
+
+      setEdited((prev) => ({ ...prev, eventsTitle: value }));
+    }
     async function selectFile(id, event) {
       const base64 = await toBase64(event.target.files[0]);
       const objectUrl = URL.createObjectURL(event.target.files[0]);
@@ -122,19 +132,48 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
         size={"lg"}
       >
         <ModalOverlay />
-        <ModalContent width="100%">
+        <ModalContent width="100%" minWidth={'80vw'} >
           <ModalCloseButton />
           <ModalHeader>
-            Alteração Eventos{" "}
+            Alteração Eventos
+
+          </ModalHeader>
+          <ModalBody overflow={"scroll"} width={"100%"} >
+            <ModalHeader>
+              <Text
+                as={"span"}
+                bgGradient="linear(to-r, #FF7F00, #FFD700, #00BFFF, #9901F6)"
+                bgClip="text"
+                fontSize={{ base: "5xl", sm: "4xl", md: "5xl", lg: "6xl" }}
+              >
+                {edited.eventsTitle}
+              </Text>
+            </ModalHeader>
+            <Flex
+              flexDirection={"column"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              gap={4}
+              background={"#CCC"}
+              rounded={"10px"}
+              paddingY={2}
+              paddingX={2}
+            >
+              <Input
+                background={"#ffffff"}
+                defaultValue={edited.eventsTitle}
+                name={`title`}
+                onChange={(event) => changeValue(null, event)}
+              />
+            </Flex>
+            <Divider my={10} />
             <Button colorScheme="blue" onClick={addNew}>
               Add
             </Button>
-          </ModalHeader>
-          <ModalBody overflow={"scroll"} width={"100%"}>
             <Grid
               width={"100%"}
               alignItems="center"
-              justifyContent={"space-between"}
+              justifyContent={"center"}
               gap={4}
             >
               {edited.events.map((banner) => (
@@ -206,7 +245,7 @@ export default function Hero({ data, setData = () => {}, isEdit = false }) {
             bgGradient="linear(to-r, #FF7F00, #FFD700, #00BFFF, #9901F6)"
             bgClip="text"
           >
-            Próximos Eventos
+            {data?.eventsTitle}
           </Text>{" "}
         </Heading>
         <Stack

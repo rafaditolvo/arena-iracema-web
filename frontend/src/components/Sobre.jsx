@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-export default function Sobre({ data, setData = () => {}, isEdit = false }) {
+export default function Sobre({ data, setData = () => { }, isEdit = false }) {
   const [modal, setModal] = useState(false);
   if (!data) {
     return <div>Propriedade 'data' não fornecida.</div>;
@@ -27,7 +28,7 @@ export default function Sobre({ data, setData = () => {}, isEdit = false }) {
       const value = target.value;
       edited.sobre[inputName] = value;
 
-      setEdited((prev) => ({ ...prev, form: edited.form }));
+      setEdited((prev) => ({ ...prev, sobre: edited.sobre }));
     }
     return (
       <Modal
@@ -39,10 +40,18 @@ export default function Sobre({ data, setData = () => {}, isEdit = false }) {
         }}
       >
         <ModalOverlay />
-        <ModalContent width="100%">
+        <ModalContent width="100%" minW={"60vw"}>
           <ModalCloseButton />
           <ModalHeader>Alteração</ModalHeader>
           <ModalBody overflow={"scroll"} width="100%">
+            <Text
+              fontSize={{ base: "5xl", sm: "6xl" }}
+              textColor="#9901F6"
+              mt={2}
+              mb={2}
+            >
+              {edited.sobre.title}
+            </Text>
             <Flex
               marginTop="50px"
               flexDirection={"column"}
@@ -51,12 +60,18 @@ export default function Sobre({ data, setData = () => {}, isEdit = false }) {
               gap={2}
               background={"#CCC"}
               rounded={"10px"}
-              paddingY={5}
-              paddingX={3}
+              paddingY={2}
+              paddingX={2}
             >
+              <Input
+                background={"#ffffff"}
+                defaultValue={edited.sobre.title}
+                name={`title`}
+                onChange={(event) => changeValue(null, event)}
+              />
               <Textarea
+                marginTop={4}
                 placeholder="Here is a sample placeholder"
-                marginY="30px"
                 background={"#ffffff"}
                 defaultValue={edited.sobre.h1}
                 name={`h1`}
@@ -100,7 +115,7 @@ export default function Sobre({ data, setData = () => {}, isEdit = false }) {
           mt={3}
           mb={2}
         >
-          Conheça nossa História!
+          {data.sobre?.title}
         </Text>
         <Text color={"gray.500"} mb={2} fontSize={{ base: "md", sm: "lg" }}>
           {data.sobre?.h1}
