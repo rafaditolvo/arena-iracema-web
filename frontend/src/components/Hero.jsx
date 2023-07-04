@@ -133,7 +133,7 @@ export default function Hero({ data, setData = () => { }, isEdit = false }) {
       >
         <ModalOverlay />
         <ModalContent width="100%" minWidth={'80vw'} >
-          <ModalCloseButton minWidth={"20vw"} background={"green.500"} _hover={{ background: 'green.400' }}><Text fontWeight={'bold'}>Manter alterações</Text></ModalCloseButton>
+          <ModalCloseButton minWidth={"180px"} background={"green.500"} _hover={{ background: 'green.400' }}><Text fontWeight={'bold'}>Manter alterações</Text></ModalCloseButton>
           <ModalHeader>
             Alteração Eventos
 

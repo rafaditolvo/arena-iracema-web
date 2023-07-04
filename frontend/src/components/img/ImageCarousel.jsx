@@ -172,7 +172,7 @@ export default function ImageCarousel({
       >
         <ModalOverlay />
         <ModalContent width="100%">
-          <ModalCloseButton minWidth={"20vw"} background={"green.500"} _hover={{ background: 'green.400' }}><Text fontWeight={'bold'}>Manter alterações</Text></ModalCloseButton>
+          <ModalCloseButton minWidth={"180px"} background={"green.500"} _hover={{ background: 'green.400' }}><Text fontWeight={'bold'}>Manter alterações</Text></ModalCloseButton>
           <ModalHeader>
             Alteração banner{" "}
             <Button colorScheme="blue" onClick={addNew}>
