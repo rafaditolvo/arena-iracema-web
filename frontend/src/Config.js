@@ -156,11 +156,13 @@ function Config({ setInvalidAuth, token, tokenExpired, backMenu }) {
         w="100%"
         p={3}
         color="white"
-        // position={"fixed"}
+        position={"fixed"}
+        top={0}
+        left={0}
         display="flex"
         justify={{ base: "center", md: "center" }}
         align={{ base: "center", md: "center" }}
-        zIndex={2}
+        zIndex={'modal'}
       >
         <IconButton
           aria-label="Sair"
@@ -218,6 +220,7 @@ function Config({ setInvalidAuth, token, tokenExpired, backMenu }) {
   return (
     <div className="app-container">
       <BoxSaveAlert />
+      <Box height={"60px"} />
       {isLoading ? <Placeholder /> : <Navbar />}
       {isLoading ? (
         <Placeholder />

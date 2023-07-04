@@ -41,7 +41,7 @@ export default function Sobre({ data, setData = () => { }, isEdit = false }) {
       >
         <ModalOverlay />
         <ModalContent width="100%" minW={"60vw"}>
-          <ModalCloseButton />
+          <ModalCloseButton minWidth={"20vw"} background={"green.500"} _hover={{ background: 'green.400' }}><Text fontWeight={'bold'}>Manter alterações</Text></ModalCloseButton>
           <ModalHeader>Alteração</ModalHeader>
           <ModalBody overflow={"scroll"} width="100%">
             <Text

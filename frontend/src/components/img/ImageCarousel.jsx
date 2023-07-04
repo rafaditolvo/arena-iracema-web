@@ -25,7 +25,7 @@ import { toBase64 } from "../../utils/base64";
 
 export default function ImageCarousel({
   data,
-  setData = () => {},
+  setData = () => { },
   isEdit = false,
 }) {
   const [modal, setModal] = useState(false);
@@ -172,7 +172,7 @@ export default function ImageCarousel({
       >
         <ModalOverlay />
         <ModalContent width="100%">
-          <ModalCloseButton />
+          <ModalCloseButton minWidth={"20vw"} background={"green.500"} _hover={{ background: 'green.400' }}><Text fontWeight={'bold'}>Manter alterações</Text></ModalCloseButton>
           <ModalHeader>
             Alteração banner{" "}
             <Button colorScheme="blue" onClick={addNew}>

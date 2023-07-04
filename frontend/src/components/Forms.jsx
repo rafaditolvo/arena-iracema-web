@@ -153,13 +153,16 @@ export default function Forms({ data, setData = () => { }, isEdit = false }) {
           setData(edited);
           setModal(false);
         }}
-        size="full"
+        // size="full"
+        minWidth={"80vw"}
       >
         <ModalOverlay />
-        <ModalContent width="100%">
-          <ModalCloseButton />
+        <ModalContent width="100%"
+          minWidth={"80vw"}>
+          <ModalCloseButton minWidth={"20vw"} background={"green.500"} _hover={{ background: 'green.400' }}><Text fontWeight={'bold'}>Manter alterações</Text></ModalCloseButton>
           <ModalHeader>Alteração</ModalHeader>
-          <ModalBody overflow={"scroll"} width="100%">
+          <ModalBody overflow={"scroll"} width="100%"
+            minWidth={"80vw"} height={"50vh"}>
             <ModalHeader>
               <Text
                 as={"span"}
@@ -305,7 +308,7 @@ export default function Forms({ data, setData = () => { }, isEdit = false }) {
               alignItems="center"
               justifyContent={"space-between"}
               gap={2}
-              templateColumns="repeat(3, 1fr)"
+              templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(2, 1fr)" }}
             >
               {edited.form.avatar.map((avatar) => (
                 <Flex
