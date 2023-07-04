@@ -133,6 +133,8 @@ export default function Forms({ data, setData = () => { }, isEdit = false }) {
       } else {
         edited.form.src = objectUrl;
         edited.form.base64 = base64;
+        edited.form.fileType = event.target.files[0].type;
+        edited.form.fileName = event.target.files[0].name;
       }
       setEdited((prev) => ({ ...prev, form: edited.form }));
     }
